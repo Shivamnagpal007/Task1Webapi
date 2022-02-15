@@ -1,0 +1,71 @@
+﻿@model TaskFrontEnd.Models.EmployeVM
+@{
+    var title = "Create New Employee";
+}
+@if (Model.Employee.empId != 0)
+{
+    title = "Edit EMployee";
+}
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Employee.empId" />
+    <div class="row border">
+        <div class="col-12" border-bottom>
+            <h2 class="text-primary">@title</h2>
+        </div>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="col-8">
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Employee.ename"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Employee.ename" class="form-control" />
+                <span asp-validation-for="Employee.ename" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Employee.eadd"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Employee.eadd" class="form-control" />
+                <span asp-validation-for="Employee.eadd" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Employee.esal"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Employee.esal" class="form-control" />
+                <span asp-validation-for="Employee.esal" class="text-danger"></span>
+            </div>
+        </div>
+        <div class=" form-group">
+            <label asp-for="Employee.depId"></label>
+            @Html.DropDownListFor(m => m.Employee.depId, Model.DepartmentList, "Select Department", new { @class = "form-control" })
+            <span asp-validation-for="Employee.depId" class=" text-danger"></span>
+        </div>
+        <div class=" form-group">
+            <label asp-for="Employee.dsgId"></label>
+            @Html.DropDownListFor(m => m.Employee.dsgId, Model.DesignationList, "Select Designation", new { @class = "form-control" })
+            <span asp-validation-for="Employee.dsgId" class=" text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4">
+            <button type="submit" class="btn btn-primary form-control">
+                @(Model.Employee.empId != 0?"update":"create")
+            </button>
+        </div>
+        <div class="col-4">
+            <a asp-action="Index" class="btn btn-success form-control">Back To List</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_validationScriptsPartial" />
+}

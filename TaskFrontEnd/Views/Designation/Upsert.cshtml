@@ -1,0 +1,43 @@
+﻿@model TaskFrontEnd.Models.Designation
+@{
+    var title = "Create New  Designation";
+}
+@if(Model.dsgId != 0)
+{
+    title = "Edit Designation";
+}
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="dsgId" />
+    <div class="row border">
+        <div class="col-12" border-bottom>
+            <h2 class="text-primary">@title</h2>
+        </div>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="col-8">
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="dsgname"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="dsgname" class="form-control" />
+                <span asp-validation-for="dsgname" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4">
+            <button type="submit" class="btn btn-primary form-control">
+                @(Model.dsgId != 0?"update":"create")
+            </button>
+        </div>
+        <div class="col-4">
+            <a asp-action="Index" class="btn btn-success form-control">Back To List</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_validationScriptsPartial" />
+}
