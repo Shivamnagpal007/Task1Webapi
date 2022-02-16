@@ -9,10 +9,10 @@ using TaskFrontEnd.Repository.Irepository;
 
 namespace TaskFrontEnd.Repository
 {
-    public class DesignationRepository:Repository<Designation>,IDesignationRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public DesignationRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory,httpContextAccessor)
+        public UserRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory,httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
         }

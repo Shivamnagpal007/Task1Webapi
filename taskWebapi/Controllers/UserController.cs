@@ -13,7 +13,6 @@ namespace taskWebapi.Controllers
 {
     [Route("api/login")]
     [ApiController]
-    // [ApiExplorerSettings(GroupName = "UserDoc")]
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;

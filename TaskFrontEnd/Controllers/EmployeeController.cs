@@ -110,19 +110,7 @@ namespace TaskFrontEnd.Controllers
                 }
                 else
                 {
-                    Employee receivedEmployee = new Employee();
-
-                    var httpClient = new HttpClient();
-                    var request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44335/api/EmpDep")
-                    {
-                        Content = new StringContent(new JavaScriptSerializer().Serialize(employee), Encoding.UTF8, "application/json")
-                    };
-
-                    var response = await httpClient.SendAsync(request);
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    ViewBag.Result = "Success";
-                    receivedEmployee = JsonConvert.DeserializeObject<Employee>(apiResponse);                
-                    //await _employeRepository.UpdateAsync(SD.EmployeeApiPath + employee.empId, employee);
+                    await _employeRepository.UpdateAsync(SD.EmployeeApiPath, employee);
                 }
                 return RedirectToAction(nameof(Index));
             }

@@ -17,7 +17,7 @@ namespace taskWebapi.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeDepartment> EmployeeDepartments { get; set; }
-        public DbSet<User> users { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<EmployeeDepartment>().HasKey(table => new {

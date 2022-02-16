@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace taskWebapi.Controllers
 {
     [Route("api/Dsg")]
     [ApiController]
+    [Authorize]
     public class DsgController : ControllerBase
     {
         private readonly IDsgRepository _dsgRepository;

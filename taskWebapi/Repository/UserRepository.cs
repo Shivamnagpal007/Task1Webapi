@@ -25,7 +25,7 @@ namespace taskWebapi.Repository
             }
             public User Authenticate(string userName, string password)
             {
-                var userInDb = _context.users.FirstOrDefault
+                var userInDb = _context.Users.FirstOrDefault
                        (u => u.Username == userName && u.Password == password);
                 if (userInDb == null)
                     return null;
@@ -53,7 +53,7 @@ namespace taskWebapi.Repository
 
             public bool IsUniqueUser(string userName)
             {
-                var user = _context.users.FirstOrDefault(u => u.Username == userName);
+                var user = _context.Users.FirstOrDefault(u => u.Username == userName);
                 if (user == null)
                     return true;
                 else
@@ -64,11 +64,14 @@ namespace taskWebapi.Repository
             {
                     User userdata = new User()
                     {
+                        FirstName=user.FirstName,
+                        LastName=user.LastName,
+                        Email=user.Email,
                         Username = user.Username,
                         Password = user.Password,
 
                     };
-                    _context.users.Add(userdata);
+                    _context.Users.Add(userdata);
                     _context.SaveChanges();
                     //    //JWT Authentication
                     //    var tokenHandler = new JwtSecurityTokenHandler();

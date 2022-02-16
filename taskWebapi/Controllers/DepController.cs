@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,6 +13,7 @@ namespace taskWebapi.Controllers
 {
     [Route("api/Dep")]
     [ApiController]
+    [Authorize]
     public class DepController : ControllerBase
     {
         private readonly IDepRepository _depRepository;

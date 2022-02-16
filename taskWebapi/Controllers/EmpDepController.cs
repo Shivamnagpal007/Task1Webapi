@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,6 +15,7 @@ namespace taskWebapi.Controllers
 {
     [Route("api/EmpDep")]
     [ApiController]
+    [Authorize]
     public class EmpDepController : ControllerBase
     {
         private readonly IempDepRepository _empdepRepository;

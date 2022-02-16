@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace taskWebapi.Models
+namespace TaskFrontEnd.Models
 {
     public class User
     {
-        public int Id { get; set; }
-     
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        [Required(ErrorMessage = "Username is required.")]
+        [Required]
         public string Username { get; set; }
-        [Required(ErrorMessage = "Password is required.")]
-        public string Password { get; set; }         
+        [Required]
+        public string Password { get; set; }
         public string Token { get; set; }
-
     }
 }

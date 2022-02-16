@@ -12,11 +12,11 @@ namespace TaskFrontEnd.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
-        private readonly ILogger<DepartmentController> _logger;
-        public DepartmentController(IDepartmentRepository departmentRepository, ILogger<DepartmentController> logger)
+    
+        public DepartmentController(IDepartmentRepository departmentRepository)
         {
             _departmentRepository = departmentRepository;
-            _logger = logger;
+            
         }
         public IActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace TaskFrontEnd.Controllers
         }
         public async Task<IActionResult> GetAll()
         {
-            _logger.LogTrace("this is dep trace log");
+            
             return Json(new { data = await _departmentRepository.GetAllAsync(SD.DepartmentApiPath) });
         }
 
@@ -54,7 +54,7 @@ namespace TaskFrontEnd.Controllers
                 {
                     await _departmentRepository.UpdateAsync(SD.DepartmentApiPath + department.depId, department);
                 }
-                return RedirectToAction(nameof(Index));
+               return RedirectToAction(nameof(Index));
             }
             else
             {

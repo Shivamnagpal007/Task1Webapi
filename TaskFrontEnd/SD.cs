@@ -12,6 +12,17 @@ namespace TaskFrontEnd
         public static string DepartmentApiPath = APIBasedUrl + "api/Dep/";
         public static string EmployeeApiPath = APIBasedUrl + "api/EmpDep/";
       //  public static string GetAllEmployees = APIBasedUrl + "api/EmpDep/GetAllEmployees/";
-        public static string EmployeeApiPathGetByID = APIBasedUrl + "api/EmpDep/GetEmployeeByid/";       
+        public static string EmployeeApiPathGetByID = APIBasedUrl + "api/EmpDep/GetEmployeeByid/"; 
+        
+
+        public static string UserRegister = APIBasedUrl + "api/login/register/";
+
+
+        public const string UserDetails = "JWToken";
+        public const string Cookiesdata = "JWToken";
+        public const string newtoken = "key";
+
+
+
     }
 }
