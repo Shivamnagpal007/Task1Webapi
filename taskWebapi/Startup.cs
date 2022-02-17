@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -72,10 +73,25 @@ namespace taskWebapi
             services.AddDbContext<ApplicationDbcontext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
+            services.AddTransient<UserManager<ApplicationUser>, ApplicationUserManager>();
+            services.AddTransient<SignInManager<ApplicationUser>, ApplicationSignInManager>();
+            services.AddTransient<RoleManager<ApplicationRole>, ApplicationRoleManager>();
+            services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();    
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+            .AddEntityFrameworkStores<ApplicationDbcontext>()
+            .AddUserStore<ApplicationUserStore>()
+            .AddUserManager<ApplicationUserManager>()
+            .AddRoleManager<ApplicationRoleManager>()
+            .AddSignInManager<ApplicationSignInManager>()
+            .AddRoleStore<ApplicationRoleStore>()
+            .AddDefaultTokenProviders();
+            services.AddScoped<ApplicationRoleStore>();
+            services.AddScoped<ApplicationUserStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
          
             //builder.Logging.ClearProviders();
@@ -90,10 +106,40 @@ namespace taskWebapi
             app.UseAuthentication();        
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
+
+            IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (IServiceScope scope = serviceScopeFactory.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                //Create Role        
+                if (!await roleManager.RoleExistsAsync("Admin"))
+                {
+                    var role = new ApplicationRole();
+                    role.Name = "Admin";
+                    await roleManager.CreateAsync(role);
+                }
+                //Create Admin User
+
+                if (await userManager.FindByNameAsync("admin") == null)
+                {
+                    var user = new ApplicationUser();
+                    user.UserName = "admin";
+                    user.Email = "admin@gmail.com";
+                    var userPassword = "Admin@123";
+                    var chkuser = await userManager.CreateAsync(user, userPassword);
+                    if (chkuser.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, "Admin");
+                    }
+                }
+
+
+                app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
     }
+}
 }

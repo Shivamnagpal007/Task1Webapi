@@ -41,6 +41,20 @@ namespace TaskFrontEnd.Repository
                 return true;
             else return false;
         }
+        public async Task<bool> CreateUser(string url, T objtoCreate)
+        {          
+            var request = new HttpRequestMessage(HttpMethod.Post, url);          
+            if (objtoCreate != null)
+            {
+                request.Content = new StringContent(JsonConvert.SerializeObject(objtoCreate), Encoding.UTF8,
+                "application/json");
+            }
+            var client = _httpClientFactory.CreateClient();
+            HttpResponseMessage Response = await client.SendAsync(request);
+            if (Response.StatusCode == System.Net.HttpStatusCode.Created)
+                return true;
+            else return false;
+        }
 
         public async Task<bool> DeleteAsync(string url, int id)
         {

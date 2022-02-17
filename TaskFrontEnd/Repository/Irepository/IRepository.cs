@@ -13,6 +13,7 @@ namespace  TaskFrontEnd.Repository.Irepository
         Task<List<T>> Getasync(string url, int id);
         Task<IEnumerable<T>> GetAllAsync(string url); //Display
         Task<bool> CreateAsync(string url, T objtoCreate); //Create
+        Task<bool> CreateUser(string url, T objtoCreate); //Create
         Task<bool> UpdateAsync(string url, T objtoUpdate); //Update
         Task<bool> DeleteAsync(string url, int id); //Delete
         Task<bool> DeleteAsyncEmployee(string url, int Empid,int Depid); //Delete

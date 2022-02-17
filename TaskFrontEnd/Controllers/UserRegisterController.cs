@@ -32,7 +32,7 @@ namespace TaskFrontEnd.Controllers
 
             if (ModelState.IsValid)
             {
-                await _userRepository.CreateAsync(SD.UserRegister, user);
+                await _userRepository.CreateUser(SD.UserRegister, user);
             }
             return RedirectToAction("userRegister");
                      
