@@ -16,6 +16,7 @@ namespace TaskFrontEnd
         
 
         public static string UserRegister = APIBasedUrl + "api/login/register/";
+        public static string UserLogin = APIBasedUrl + "api/login/authenticate/";
 
 
         public const string UserDetails = "JWToken";

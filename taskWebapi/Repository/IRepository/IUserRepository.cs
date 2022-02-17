@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using taskWebapi.Data;
 using taskWebapi.Models;
+using taskWebapi.Models.ViewModel;
 
 namespace taskWebapi.Repository.IRepository
 { 
     public interface IUserRepository
     {
         bool IsUniqueUser(string userName);
-        User UserRegister(User user);
-        User Authenticate(string userName, string password);
+        Task<ApplicationUser> Register(User user);
+        Task<ApplicationUser> Authenticate(authenticateViewModel authenticateViewModel);
+
 
     }
 }

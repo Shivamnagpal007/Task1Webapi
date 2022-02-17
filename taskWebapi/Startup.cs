@@ -107,32 +107,32 @@ namespace taskWebapi
             app.UseRouting();
             app.UseAuthorization();
 
-            IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-            using (IServiceScope scope = serviceScopeFactory.CreateScope())
-            {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                //Create Role        
-                if (!await roleManager.RoleExistsAsync("Admin"))
-                {
-                    var role = new ApplicationRole();
-                    role.Name = "Admin";
-                    await roleManager.CreateAsync(role);
-                }
-                //Create Admin User
+            //IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            //using (IServiceScope scope = serviceScopeFactory.CreateScope())
+            //{
+            //    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            //    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            //    //Create Role        
+            //    if (!await roleManager.RoleExistsAsync("Admin"))
+            //    {
+            //        var role = new ApplicationRole();
+            //        role.Name = "Admin";
+            //        await roleManager.CreateAsync(role);
+            //    }
+            //    //Create Admin User
 
-                if (await userManager.FindByNameAsync("admin") == null)
-                {
-                    var user = new ApplicationUser();
-                    user.UserName = "admin";
-                    user.Email = "admin@gmail.com";
-                    var userPassword = "Admin@123";
-                    var chkuser = await userManager.CreateAsync(user, userPassword);
-                    if (chkuser.Succeeded)
-                    {
-                        await userManager.AddToRoleAsync(user, "Admin");
-                    }
-                }
+            //    if (await userManager.FindByNameAsync("admin") == null)
+            //    {
+            //        var user = new ApplicationUser();
+            //        user.UserName = "admin";
+            //        user.Email = "admin@gmail.com";
+            //        var userPassword = "Admin@123";
+            //        var chkuser = await userManager.CreateAsync(user, userPassword);
+            //        if (chkuser.Succeeded)
+            //        {
+            //            await userManager.AddToRoleAsync(user, "Admin");
+            //        }
+            //    }
 
 
                 app.UseEndpoints(endpoints =>
@@ -141,5 +141,4 @@ namespace taskWebapi
             });
         }
     }
-}
 }

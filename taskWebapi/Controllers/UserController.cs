@@ -24,30 +24,22 @@ namespace taskWebapi.Controllers
         }
           
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] authenticateViewModel authenticateViewModel)
+        public async Task<IActionResult> Authenticate([FromBody] authenticateViewModel authenticateViewModel)
         {
-            var user = _userRepository.Authenticate(authenticateViewModel.Username, authenticateViewModel.Password);
+            var user =await _userRepository.Authenticate(authenticateViewModel);
             if (user == null)
                 return BadRequest("Wrong username and password");
-            return Ok(user);
-        }
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] User user)
-        {
-
-            if (ModelState.IsValid)
-            {
-                var isUniquelogin = _userRepository.IsUniqueUser(user.Username);
-                if (!isUniquelogin)
-                    return BadRequest("Username must be unique");
-                var userInfo = _userRepository.UserRegister(user);
-                if (userInfo == null)
-                    return BadRequest();
-                return Ok(userInfo);
-            }
             else
-                return BadRequest();
-
+               return Ok(user);
+        }
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register(User user)
+        {
+            var registeruser = await _userRepository.Register(user);
+            if (registeruser == null)
+                return BadRequest(new { message = "User already exist" });
+            return Ok(registeruser);
         }
 
     }

@@ -8,7 +8,7 @@ namespace taskWebapi
     public class SD
     {
         //roles     
-        public const string Role_User_Admin = "Admin";   
+        public const string Role_Admin = "Admin";   
 
     }
 }
