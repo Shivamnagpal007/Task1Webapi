@@ -14,6 +14,7 @@ namespace TaskFrontEnd
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+           
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,5 +23,7 @@ namespace TaskFrontEnd
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+
     }
 }

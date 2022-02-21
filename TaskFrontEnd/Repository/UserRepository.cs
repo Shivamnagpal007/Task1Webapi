@@ -12,9 +12,14 @@ namespace TaskFrontEnd.Repository
     public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public UserRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory,httpContextAccessor)
+        public UserRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
         }
+        //private readonly IHttpClientFactory _httpClientFactory;
+        //public UserRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        //{
+        //    _httpClientFactory = httpClientFactory;
+        //}
     }
 }

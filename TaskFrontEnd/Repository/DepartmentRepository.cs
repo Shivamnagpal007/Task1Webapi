@@ -12,9 +12,14 @@ namespace TaskFrontEnd.Repository
     public class DepartmentRepository: Repository<Department>,IDepartmentRepository
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public DepartmentRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory,httpContextAccessor )
+        public DepartmentRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
         }
+       
+        //public DepartmentRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        //{
+        //    _httpClientFactory = httpClientFactory;
+        //}
     }
 }

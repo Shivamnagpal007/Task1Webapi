@@ -11,8 +11,13 @@ namespace TaskFrontEnd.Repository
 {
     public class DesignationRepository:Repository<Designation>,IDesignationRepository
     {
+       
         private readonly IHttpClientFactory _httpClientFactory;
-        public DesignationRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory,httpContextAccessor)
+        //public DesignationRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        //{
+        //    _httpClientFactory = httpClientFactory;
+        //}
+        public DesignationRepository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
         }

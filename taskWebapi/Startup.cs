@@ -37,7 +37,7 @@ namespace taskWebapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDsgRepository,DsgRepository>();
+            services.AddScoped<IDsgRepository, DsgRepository>();
             services.AddScoped<IDepRepository, DepRepository>();
             services.AddScoped<IEmployeRepository, EmployeeRepository>();
             services.AddScoped<IempDepRepository, EmpdepRepository>();
@@ -77,7 +77,7 @@ namespace taskWebapi
             services.AddTransient<UserManager<ApplicationUser>, ApplicationUserManager>();
             services.AddTransient<SignInManager<ApplicationUser>, ApplicationSignInManager>();
             services.AddTransient<RoleManager<ApplicationRole>, ApplicationRoleManager>();
-            services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();    
+            services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
             services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbcontext>()
             .AddUserStore<ApplicationUserStore>()
@@ -88,12 +88,16 @@ namespace taskWebapi
             .AddDefaultTokenProviders();
             services.AddScoped<ApplicationRoleStore>();
             services.AddScoped<ApplicationUserStore>();
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = 2147483647;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-         
+
             //builder.Logging.ClearProviders();
             //builder.Logging.AddConsole();
             if (env.IsDevelopment())
@@ -103,7 +107,7 @@ namespace taskWebapi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "taskWebapi v1"));
             }
             app.UseHttpsRedirection();
-            app.UseAuthentication();        
+            app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
 
@@ -119,26 +123,27 @@ namespace taskWebapi
             //        role.Name = "Admin";
             //        await roleManager.CreateAsync(role);
             //    }
-            //    //Create Admin User
+            ////Create Admin User
 
-            //    if (await userManager.FindByNameAsync("admin") == null)
+            //if (await userManager.FindByNameAsync("admin") == null)
+            //{
+            //    var user = new ApplicationUser();
+            //    user.UserName = "admin";
+            //    user.Email = "admin@gmail.com";
+            //    var userPassword = "Admin@123";
+            //    var chkuser = await userManager.CreateAsync(user, userPassword);
+            //    if (chkuser.Succeeded)
             //    {
-            //        var user = new ApplicationUser();
-            //        user.UserName = "admin";
-            //        user.Email = "admin@gmail.com";
-            //        var userPassword = "Admin@123";
-            //        var chkuser = await userManager.CreateAsync(user, userPassword);
-            //        if (chkuser.Succeeded)
-            //        {
-            //            await userManager.AddToRoleAsync(user, "Admin");
-            //        }
+            //        await userManager.AddToRoleAsync(user, "Admin");
             //    }
+            //}
 
 
-                app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
     }
 }
+

@@ -36,8 +36,8 @@ namespace taskWebapi.Repository
                 var applicationUser = await _applicationUserManager.FindByNameAsync(authenticateViewModel.Username);
                 applicationUser.PasswordHash = null;
                 //  JWT Token
-                if (await _applicationUserManager.IsInRoleAsync(applicationUser, SD.Role_Admin))
-                    applicationUser.Role = SD.Role_Admin;              
+                //if (await _applicationUserManager.IsInRoleAsync(applicationUser, SD.Role_Admin))
+                //    applicationUser.Role = SD.Role_Admin;              
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = System.Text.Encoding.ASCII.GetBytes(_appSettings.Secret);
 
@@ -47,7 +47,7 @@ namespace taskWebapi.Repository
                   {
                   new Claim(ClaimTypes.Name,applicationUser.Id),
                 new Claim(ClaimTypes.Email,applicationUser.Email),
-                   new Claim(ClaimTypes.Role,applicationUser.Role)
+                   //new Claim(ClaimTypes.Role,applicationUser.Role)
                   }),
                     Expires = DateTime.UtcNow.AddHours(30),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -84,7 +84,11 @@ namespace taskWebapi.Repository
                 User.Email = user.Email;
                 User.PasswordHash = user.Password;
 
-                var chkuser = await _applicationUserManager.CreateAsync(User, User.PasswordHash);            
+                var chkuser = await _applicationUserManager.CreateAsync(User, User.PasswordHash);
+                //if (chkuser.Succeeded)
+                //{
+                //    await _applicationUserManager.AddToRoleAsync(User, "Admin");
+                //}
                 return User;
             }
             else

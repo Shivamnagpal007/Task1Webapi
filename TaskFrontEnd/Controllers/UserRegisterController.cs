@@ -45,35 +45,24 @@ namespace TaskFrontEnd.Controllers
         public async Task<IActionResult> LoginUserAuthorized(authenticateViewModel authenticateViewModel)
         {          
             if (ModelState.IsValid)
-            {     
-                var request = new HttpRequestMessage(HttpMethod.Post, SD.UserLogin);
-                var client = _httpClientFactory.CreateClient();
-                HttpResponseMessage response = await client.SendAsync(request);
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+
+                using (var httpClient = new HttpClient())
                 {
-                    var userdetails = await response.Content.ReadAsStringAsync();
-                        JsonConvert.DeserializeObject<User>(userdetails);
-                   // string token = await userdetails..ReadAsStringAsync();
-                   // HttpContext.Session.SetString(SD.newtoken, userdetails.T);
-                   //HttpContext.Session.SetString(SD.UserDetails, Username.Username);
+                    StringContent stringContent = new StringContent(JsonConvert.SerializeObject(authenticateViewModel), Encoding.UTF8, "application/json");
+                    using (var result = await httpClient.PostAsync(SD.UserLogin, stringContent))
+                    {
+
+                        var UserDetails = await result.Content.ReadAsStringAsync();
+                        var Username = JsonConvert.DeserializeObject<User>(UserDetails);
+                        string token = await result.Content.ReadAsStringAsync();
+                        HttpContext.Session.SetString("JWToken", token);
+                        HttpContext.Session.SetString(SD.newtoken, Username.Token);
+                        HttpContext.Session.SetString(SD.UserDetails, Username.Username);
+                        //CookieSet(SD.Cookiesdata, token, 10);
+                    }
+
                 }
-
-                //using (var httpClient = new HttpClient())
-                //{
-                //    StringContent stringContent = new StringContent(JsonConvert.SerializeObject(authenticateViewModel), Encoding.UTF8, "application/json");
-                //    using (var result = await httpClient.PostAsync(SD.UserLogin, stringContent))
-                //    {
-                //       
-                //        //var UserDetails = await result.Content.ReadAsStringAsync();
-                //        //var Username = JsonConvert.DeserializeObject<User>(UserDetails);
-                //        //string token = await result.Content.ReadAsStringAsync();
-                //        //// HttpContext.Session.SetString("JWToken", token);
-                //        //HttpContext.Session.SetString(SD.newtoken, Username.Token);
-                //        //HttpContext.Session.SetString(SD.UserDetails, Username.Username);
-                //        //CookieSet(SD.Cookiesdata, token, 10);
-                //    }
-
-                //}
             }
             return Redirect("~/Home/Index");
 
