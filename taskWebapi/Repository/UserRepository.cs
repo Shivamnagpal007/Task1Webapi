@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -6,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using taskWebapi.Data;
 using taskWebapi.Models;
@@ -15,8 +18,8 @@ using taskWebapi.Repository.IRepository;
 namespace taskWebapi.Repository
 {
 
-    public class UserRepository : IUserRepository
-    {
+    public class UserRepository :IUserRepository
+    {     
         private readonly ApplicationDbcontext _context;
         private readonly AppSettings _appSettings;
         private readonly ApplicationUserManager _applicationUserManager;
@@ -36,8 +39,8 @@ namespace taskWebapi.Repository
                 var applicationUser = await _applicationUserManager.FindByNameAsync(authenticateViewModel.Username);
                 applicationUser.PasswordHash = null;
                 //  JWT Token
-                //if (await _applicationUserManager.IsInRoleAsync(applicationUser, SD.Role_Admin))
-                //    applicationUser.Role = SD.Role_Admin;              
+                if (await _applicationUserManager.IsInRoleAsync(applicationUser, SD.Role_Admin))
+                    applicationUser.Role = SD.Role_Admin;              
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = System.Text.Encoding.ASCII.GetBytes(_appSettings.Secret);
 
@@ -47,7 +50,7 @@ namespace taskWebapi.Repository
                   {
                   new Claim(ClaimTypes.Name,applicationUser.Id),
                 new Claim(ClaimTypes.Email,applicationUser.Email),
-                   //new Claim(ClaimTypes.Role,applicationUser.Role)
+                   new Claim(ClaimTypes.Role,applicationUser.Role)
                   }),
                     Expires = DateTime.UtcNow.AddHours(30),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -85,15 +88,16 @@ namespace taskWebapi.Repository
                 User.PasswordHash = user.Password;
 
                 var chkuser = await _applicationUserManager.CreateAsync(User, User.PasswordHash);
-                //if (chkuser.Succeeded)
-                //{
-                //    await _applicationUserManager.AddToRoleAsync(User, "Admin");
-                //}
+                if (chkuser.Succeeded)
+                {
+                    await _applicationUserManager.AddToRoleAsync(User, "Admin");                
+                }
+
                 return User;
             }
             else
                 return null;
+
         }
-   
     }
 }

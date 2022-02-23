@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31501.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "taskWebapi", "taskWebapi\taskWebapi.csproj", "{923F8570-940A-4308-9023-F83381F7CEC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFrontEnd", "TaskFrontEnd\TaskFrontEnd.csproj", "{79B9C6A4-86AB-48FE-844F-35AFA304497C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFrontEnd", "TaskFrontEnd\TaskFrontEnd.csproj", "{79B9C6A4-86AB-48FE-844F-35AFA304497C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

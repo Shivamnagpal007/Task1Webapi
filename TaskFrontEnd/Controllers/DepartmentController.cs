@@ -25,7 +25,7 @@ namespace TaskFrontEnd.Controllers
         public async Task<IActionResult> GetAll()
         {
             
-            return Json(new { data = await _departmentRepository.GetAllAsync(SD.DepartmentApiPath) });
+            return Json(new { data = await _departmentRepository.GetAllAsync(SD.DepartmentApiPath)});
         }
 
         public async Task<IActionResult> Upsert(int? id)

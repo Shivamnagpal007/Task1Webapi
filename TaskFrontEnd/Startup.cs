@@ -29,21 +29,21 @@ namespace TaskFrontEnd
         {
             services.AddControllersWithViews();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();        
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IEmployeRepository, EmployeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddHttpClient();
             services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.MaxRequestBodySize = 2147483647;
-            });
+            //services.Configure<IISServerOptions>(options =>
+            //{
+            //    options.MaxRequestBodySize = 2147483647;
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,11 +62,11 @@ namespace TaskFrontEnd
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseSession();
             app.UseAuthentication();
-            app.UseAuthorization();
+           app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

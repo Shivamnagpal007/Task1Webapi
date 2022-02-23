@@ -19,7 +19,7 @@ namespace TaskFrontEnd.Repository
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        //private readonly HttpClient _httpClient;
+        static readonly HttpClient client = new HttpClient();
         private readonly ISession _session;
 
         public Repository(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
@@ -33,10 +33,10 @@ namespace TaskFrontEnd.Repository
         {
             try
             {
-                var accessToken = _session.GetString(SD.newtoken);
+              //var accessToken = _session.GetString(SD.newtoken);
                 // var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
                 var request = new HttpRequestMessage(HttpMethod.Post, url);
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
+              // request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 if (objtoCreate != null)
                 {
                     request.Content = new StringContent(JsonConvert.SerializeObject(objtoCreate), Encoding.UTF8,
@@ -76,9 +76,9 @@ namespace TaskFrontEnd.Repository
         public async Task<bool> DeleteAsync(string url, int id)
         {
             //var accessToken = _session.GetString(SD.newtoken);
-            var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
+           // var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
             var request = new HttpRequestMessage(HttpMethod.Delete, url + id.ToString());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
             //var client = _httpClientFactory.CreateClient();
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -90,9 +90,9 @@ namespace TaskFrontEnd.Repository
         public async Task<bool> DeleteAsyncEmployee(string url, int Empid, int Depid)
         {
             //var accessToken = _session.GetString(SD.newtoken);
-            var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
+           // var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
             var request = new HttpRequestMessage(HttpMethod.Delete, url + Empid.ToString() + Depid.ToString());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
+           // request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
             //var client = _httpClientFactory.CreateClient();
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -104,49 +104,63 @@ namespace TaskFrontEnd.Repository
 
         public async Task<IEnumerable<T>> GetAllAsync(string url)
         {
-           // var accessToken = _session.GetString(SD.newtoken);
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var client = _httpClientFactory.CreateClient();
-           // client.DefaultRequestHeaders.Authorization =new AuthenticationHeaderValue("Bearer", accessToken);
-            HttpResponseMessage response = await client.SendAsync(request);
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var jsonstring = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonstring);
-            }
-            return null;
-            //try
+            //var accessToken = _session.GetString(SD.newtoken);
+
+            //using (var httpClient = new HttpClient())
             //{
-            //     var accessToken = _session.GetString(SD.newtoken);
-            //  // var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
-            //    var request = new HttpRequestMessage(HttpMethod.Get, url);
-            //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            //    //var client = new HttpClientHelper();
-            //    var client = _httpClientFactory.CreateClient();
-            //    // client.DefaultRequestHeaders.Authorization =  new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken));
-            //    //var client = new HttpClient();    
-            //    HttpResponseMessage response = await client.SendAsync(request);
-            //    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            //    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            //    using (var result = await httpClient.GetAsync(url))
             //    {
-            //        var jsonstring = await response.Content.ReadAsStringAsync();
-            //        return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonstring);
+
+            //        var UserDetails = await result.Content.ReadAsStringAsync();
+
+            //        var Username = JsonConvert.DeserializeObject<User>(UserDetails);
+            //        string token = await result.Content.ReadAsStringAsync();
+            //        //CookieSet(SD.Cookiesdata, token, 10);
             //    }
-            //    return null;
+
             //}
-            //catch (Exception e)
+
+            //var request = new HttpRequestMessage(HttpMethod.Get, url);             
+            //var client = _httpClientFactory.CreateClient();
+            //HttpResponseMessage response = await client.SendAsync(request);
+            //if (response.StatusCode == System.Net.HttpStatusCode.OK)
             //{
-            //    return null;
+            //    var jsonstring = await response.Content.ReadAsStringAsync();
+            //    return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonstring);
             //}
+            //return null;
+            try
+            {
+              //  var accessToken = _session.GetString(SD.newtoken);
+                // var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
+               var request = new HttpRequestMessage(HttpMethod.Get, url);
+              //  request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                //var client = new HttpClientHelper();
+                var client = _httpClientFactory.CreateClient();
+                // client.DefaultRequestHeaders.Authorization =  new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken));
+                //var client = new HttpClient();    
+                HttpResponseMessage response = await client.SendAsync(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var jsonstring = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonstring);
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
         }
 
         public async Task<T> GetAsync(string url, int id)
         {
-            //var accessToken = _session.GetString(SD.newtoken);
-            var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
-            var request = new HttpRequestMessage(HttpMethod.Get, url + id.ToString());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
+           // var accessToken = _session.GetString(SD.newtoken);
+            //   var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
+           var request = new HttpRequestMessage(HttpMethod.Get, url + id.ToString());
+          // request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             //var client = _httpClientFactory.CreateClient();
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -161,9 +175,9 @@ namespace TaskFrontEnd.Repository
         public async Task<List<T>> Getasync(string url, int id)
         {
             //var accessToken = _session.GetString(SD.newtoken);
-            var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
+          //  var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
             var request = new HttpRequestMessage(HttpMethod.Get, url + id.ToString());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
+          //  request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
             //var client = _httpClientFactory.CreateClient();
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -180,9 +194,9 @@ namespace TaskFrontEnd.Repository
 
             // var request = new HttpRequestMessage(HttpMethod.Put, url);
             //var accessToken = _session.GetString(SD.newtoken);
-            var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
+          //  var accessToken = _httpContextAccessor.HttpContext.Session.GetString(SD.newtoken);
             var request = new HttpRequestMessage(HttpMethod.Put, url);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
+          //  request.Headers.Authorization = new AuthenticationHeaderValue("Bearer ", accessToken);
             if (objtoUpdate != null)
             {
                 request.Content = new StringContent(JsonConvert.SerializeObject(objtoUpdate), Encoding.UTF8, "application/json");

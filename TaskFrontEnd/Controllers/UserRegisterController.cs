@@ -17,12 +17,11 @@ namespace TaskFrontEnd.Controllers
     public class UserRegisterController : Controller
     {
         private readonly IUserRepository _userRepository;
-        private readonly IHttpClientFactory _httpClientFactory;
+       
 
-        public UserRegisterController(IUserRepository userRepository, IHttpClientFactory httpClientFactory)
+        public UserRegisterController(IUserRepository userRepository)
         {
-            _userRepository = userRepository;
-            _httpClientFactory = httpClientFactory;
+            _userRepository = userRepository;         
         }
         public IActionResult userRegister()=> View();
        
@@ -46,7 +45,6 @@ namespace TaskFrontEnd.Controllers
         {          
             if (ModelState.IsValid)
             {
-
                 using (var httpClient = new HttpClient())
                 {
                     StringContent stringContent = new StringContent(JsonConvert.SerializeObject(authenticateViewModel), Encoding.UTF8, "application/json");
@@ -54,18 +52,24 @@ namespace TaskFrontEnd.Controllers
                     {
 
                         var UserDetails = await result.Content.ReadAsStringAsync();
+                     
                         var Username = JsonConvert.DeserializeObject<User>(UserDetails);
                         string token = await result.Content.ReadAsStringAsync();
                         HttpContext.Session.SetString("JWToken", token);
                         HttpContext.Session.SetString(SD.newtoken, Username.Token);
                         HttpContext.Session.SetString(SD.UserDetails, Username.Username);
                         //CookieSet(SD.Cookiesdata, token, 10);
+                        return RedirectToAction("LogIn");
                     }
 
                 }
             }
             return Redirect("~/Home/Index");
-
+           
+        }
+        public IActionResult LogIn()
+        {
+            return View();
         }
         //public void CookieSet(string key, string value, int? expireTime)
         //{

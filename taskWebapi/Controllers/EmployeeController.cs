@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using LinqKit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using taskWebapi.Data;
 using taskWebapi.Models;
 using taskWebapi.Models.Dtos;
 using taskWebapi.Repository.IRepository;
@@ -17,14 +20,28 @@ namespace taskWebapi.Controllers
     {
         private readonly IEmployeRepository _EmployeRepository;
         private readonly IMapper _mapper;
-        public EmployeeController(IEmployeRepository EmployeRepository, IMapper mapper)
+        private readonly ApplicationDbcontext _context;
+        public EmployeeController(IEmployeRepository EmployeRepository, IMapper mapper,ApplicationDbcontext context)
         {
             _EmployeRepository = EmployeRepository;
             _mapper = mapper;
+            _context = context;
+        }
+        [HttpGet("{Name: string,Address: string}")]
+        public IActionResult GetEmployeeByPb(string Name,string Address)
+        {
+            var predicate = PredicateBuilder.New<Employee>();
+            if (!string.IsNullOrEmpty(Name))
+            {
+                predicate = predicate.And(i => i.ename.ToLower().StartsWith(Name) || i.eadd.ToLower().StartsWith(Address));
+            }
+            var employees = _context.Employees.Where(predicate).Select(i => i).Include(p => p.ename).Include(p => p.eadd);
+            return null;
         }
         [HttpGet]
         public IActionResult GetEmployee()
         {
+            
             return Ok(_EmployeRepository.GetEmploye().Select(_mapper.Map<Employee, EmployeDisplayDto>));
         }
         [HttpGet("{empId:int}", Name = "Getemp")]

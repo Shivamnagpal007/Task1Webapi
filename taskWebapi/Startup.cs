@@ -16,6 +16,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using taskWebapi.Data;
 using taskWebapi.DTOMapping;
@@ -70,9 +71,15 @@ namespace taskWebapi
                   ValidateAudience = false
               };
           });
+          //  services.AddScoped < IUserClaimsPrincipalFactory<ApplicationUser>();
+       
             services.AddDbContext<ApplicationDbcontext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy => policy.RequireClaim("Admin claim"));
+            });
             services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
             services.AddTransient<UserManager<ApplicationUser>, ApplicationUserManager>();
             services.AddTransient<SignInManager<ApplicationUser>, ApplicationSignInManager>();
@@ -110,7 +117,7 @@ namespace taskWebapi
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
-
+         
             //IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             //using (IServiceScope scope = serviceScopeFactory.CreateScope())
             //{

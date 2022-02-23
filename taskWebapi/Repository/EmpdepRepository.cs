@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,7 @@ namespace taskWebapi.Repository
 
         public List<findempdempdto> Getempdep()
         {
+
             var employee = (from ed in _context.EmployeeDepartments
                             join dep in _context.Departments
                             on ed.depId equals dep.depId
@@ -63,7 +65,7 @@ namespace taskWebapi.Repository
                                 empId = emp.empId,
                                 ename = emp.ename,
                                 esal = emp.esal,
-                                eadd = emp.eadd,                            
+                                eadd = emp.eadd,
                                 dsgname = dsg.dsgname,
                                 dname = dep.dname
                             }).ToList();

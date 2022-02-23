@@ -15,7 +15,7 @@ namespace taskWebapi.Controllers
 {
     [Route("api/EmpDep")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class EmpDepController : ControllerBase
     {
         private readonly IempDepRepository _empdepRepository;

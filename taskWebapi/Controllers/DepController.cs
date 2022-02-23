@@ -14,6 +14,7 @@ namespace taskWebapi.Controllers
     [Route("api/Dep")]
     [ApiController]
     [Authorize]
+    //[Authorize(Roles ="Admin")]
     public class DepController : ControllerBase
     {
         private readonly IDepRepository _depRepository;
@@ -41,7 +42,8 @@ namespace taskWebapi.Controllers
             return Ok(Department);
         }
         [HttpPost]
-        public IActionResult CreateDepartment([FromBody] Department Department)
+      
+         public IActionResult CreateDepartment([FromBody] Department Department)
         {
             if (Department == null)
                 //return NotFound();

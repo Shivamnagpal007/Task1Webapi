@@ -20,7 +20,7 @@ namespace TaskFrontEnd
 
 
         public const string UserDetails = "JWToken";
-        public const string Cookiesdata = "JWToken";
+        //public const string Cookiesdata = "JWToken";
         public const string newtoken = "key";
 
 
