@@ -13,22 +13,23 @@ namespace taskWebapi.Controllers
 {
     [Route("api/Dep")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     //[Authorize(Roles ="Admin")]
     public class DepController : ControllerBase
     {
-        private readonly IDepRepository _depRepository;
-        
-        public DepController(IDepRepository depRepository)
+      
+        private readonly IUnitOfWork _unitOfWork;
+        public DepController(IUnitOfWork unitOfWork)
         {
-            _depRepository = depRepository;
-            
+            _unitOfWork = unitOfWork;
+
         }
+        
         [HttpGet]
         public IActionResult GetDepartments()
         {
-          
-            var Deplist = _depRepository.Getdep();
+
+            var Deplist = _unitOfWork.Department.Getdep().ToList();
             return Ok(Deplist);
 
         }
@@ -36,25 +37,25 @@ namespace taskWebapi.Controllers
         public IActionResult GetDepatment(int Id)
         {
 
-            var Department = _depRepository.Getdep(Id);
+            var Department = _unitOfWork.Department.Getdep(Id);
             if (Department == null)
                 return StatusCode(404, ModelState);
             return Ok(Department);
         }
         [HttpPost]
-      
-         public IActionResult CreateDepartment([FromBody] Department Department)
+
+        public IActionResult CreateDepartment([FromBody] Department Department)
         {
             if (Department == null)
                 //return NotFound();
                 return BadRequest();  // 400 Error
-            if (_depRepository.depexist(Department.dname))
+            if (_unitOfWork.Department.depexist(Department.dname))
             {
                 ModelState.AddModelError("", "Department name Already In The DB");
                 return StatusCode(404, ModelState); // Not Found Error
             }
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (!_depRepository.Createdep(Department))
+            if (!_unitOfWork.Department.Createdep(Department))
             {
                 ModelState.AddModelError("", $"SomeThing Went Wrong While Save Data{Department.dname}");
                 return StatusCode(500, ModelState); // Server Error
@@ -67,13 +68,13 @@ namespace taskWebapi.Controllers
         {
             if (Department == null)
                 return BadRequest();
-            if (_depRepository.depexist(Department.dname))
+            if (_unitOfWork.Department.depexist(Department.dname))
             {
                 ModelState.AddModelError("", "Department name Already In The DB");
                 return StatusCode(404, ModelState);
             }
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (!_depRepository.Updatedep(Department))
+            if (!_unitOfWork.Department.Updatedep(Department))
             {
                 ModelState.AddModelError("", $"Something Went Wrong While Update Data{Department.dname}");
                 return StatusCode(500, ModelState);
@@ -84,12 +85,12 @@ namespace taskWebapi.Controllers
         [HttpDelete("{Id:int}")]
         public IActionResult DeleteDepartment(int Id)
         {
-            if (!_depRepository.depexist(Id))
+            if (!_unitOfWork.Department.depexist(Id))
                 return NotFound();
-            var Department = _depRepository.Getdep(Id);
+            var Department = _unitOfWork.Department.Getdep(Id);
             if (Department == null)
                 return NotFound();
-            if (!_depRepository.Deletedep(Department))
+            if (!_unitOfWork.Department.Deletedep(Department))
             {
                 ModelState.AddModelError("", $"SomeThing Went Wrong While Deleting Data{Department.dname}");
                 return StatusCode(StatusCodes.Status500InternalServerError, ModelState);

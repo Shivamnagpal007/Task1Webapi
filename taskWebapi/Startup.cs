@@ -39,10 +39,11 @@ namespace taskWebapi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IDsgRepository, DsgRepository>();
-            services.AddScoped<IDepRepository, DepRepository>();
+          //  services.AddScoped<IDepRepository, DepRepository>();
             services.AddScoped<IEmployeRepository, EmployeeRepository>();
             services.AddScoped<IempDepRepository, EmpdepRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddControllers();
             services.AddSwaggerGen(c =>

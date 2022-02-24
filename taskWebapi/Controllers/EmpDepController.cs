@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using taskWebapi.Data;
@@ -20,13 +22,27 @@ namespace taskWebapi.Controllers
     {
         private readonly IempDepRepository _empdepRepository;
         private readonly IMapper _mapper;
+        private readonly ApplicationDbcontext _context;
        
-        public EmpDepController(IempDepRepository empdepRepository,IMapper mapper)
+        public EmpDepController(IempDepRepository empdepRepository,IMapper mapper, ApplicationDbcontext context)
         {
             _empdepRepository = empdepRepository;
             _mapper = mapper;
+            _context=context;
          
         }
+        //[HttpGet("GetEmployeBypredicate")]
+        //public IActionResult GetEmployeesByPredicate(string Name, string Address)
+        //{
+        //    var predicate = PredicateBuilder.New<EmployeeDepartment>();
+        //    if (!string.IsNullOrEmpty(Name))
+        //    {
+        //        predicate = predicate.And(i => i.Employee.ename.ToLower().StartsWith(Name) || i.Employee.eadd.ToLower().StartsWith(Address));
+        //    }
+        //    var employees = _context.EmployeeDepartments.Where(predicate).Select(i => i).Include(p => p.Employee.ename).Include(p => p.Employee.eadd).ToList();
+        //    return Ok(employees);
+            
+        //}
         [HttpGet]
         public IActionResult GetEmployees()
         {
