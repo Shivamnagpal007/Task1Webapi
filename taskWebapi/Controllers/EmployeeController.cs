@@ -27,16 +27,34 @@ namespace taskWebapi.Controllers
             _mapper = mapper;
             _context = context;
         }
-        [HttpGet("{Name: string,Address: string}")]
-        public IActionResult GetEmployeeByPb(string Name,string Address)
+        [HttpGet("GetEmployeBypredicate")]
+        public IActionResult GetEmployeeByPb(string Name,string Address,int sal,int DesignationId)
         {
             var predicate = PredicateBuilder.New<Employee>();
             if (!string.IsNullOrEmpty(Name))
             {
                 predicate = predicate.And(i => i.ename.ToLower().StartsWith(Name) || i.eadd.ToLower().StartsWith(Address));
             }
-            var employees = _context.Employees.Where(predicate).Select(i => i).Include(p => p.ename).Include(p => p.eadd);
-            return null;
+            if (sal != 0)
+            {               
+                predicate = predicate.And(i => i.esal == sal);
+            }
+            if (DesignationId != 0)
+            {
+                predicate = predicate.And(i => i.Designation.dsgId == DesignationId);
+            }
+
+            //if (sal!=0)
+            //{
+
+            //    predicate = predicate.And(i => i.ename.ToLower().StartsWith(Name) || i.eadd.ToLower().StartsWith(Address));
+            //}
+            if (!string.IsNullOrEmpty(Address))
+            {
+                predicate = predicate.And(i => i.ename.ToLower().StartsWith(Name) || i.eadd.ToLower().StartsWith(Address));
+            }
+            var employees = _context.Employees.Where(predicate).Select(i => i).Include(p => p.ename).Include(p => p.eadd).Include(p => p.esal).Include(p=>p.Designation.dsgId).ToList();
+            return Ok(employees);
         }
         [HttpGet]
         public IActionResult GetEmployee()
