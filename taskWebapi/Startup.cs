@@ -38,10 +38,9 @@ namespace taskWebapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDsgRepository, DsgRepository>();
-          //  services.AddScoped<IDepRepository, DepRepository>();
-            services.AddScoped<IEmployeRepository, EmployeeRepository>();
-            services.AddScoped<IempDepRepository, EmpdepRepository>();
+          
+          
+            services.AddScoped<IEmployeeDepartment, Repository.EmployeeDepartmentRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(MappingProfile));

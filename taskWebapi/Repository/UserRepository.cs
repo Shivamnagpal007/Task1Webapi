@@ -39,8 +39,8 @@ namespace taskWebapi.Repository
                 var applicationUser = await _applicationUserManager.FindByNameAsync(authenticateViewModel.Username);
                 applicationUser.PasswordHash = null;
                 //  JWT Token
-                if (await _applicationUserManager.IsInRoleAsync(applicationUser, SD.Role_Admin))
-                    applicationUser.Role = SD.Role_Admin;              
+                if (await _applicationUserManager.IsInRoleAsync(applicationUser, StaticData.Role_Admin))
+                    applicationUser.Role = StaticData.Role_Admin;              
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = System.Text.Encoding.ASCII.GetBytes(_appSettings.Secret);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using taskWebapi.Models.Dtos;
 
 namespace taskWebapi.Repository.IRepository
 {
@@ -16,5 +17,6 @@ namespace taskWebapi.Repository.IRepository
         bool Remove(T entity);
 
         bool Save();
+       
     }
 }

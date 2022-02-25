@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TaskFrontEnd
 {
-    public static class SD
+    public static class StaticData
     {
         public static string APIBasedUrl = "https://localhost:44335/";
         public static string DesignationApiPath = APIBasedUrl + "api/Dsg/";

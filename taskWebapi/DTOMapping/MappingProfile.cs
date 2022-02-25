@@ -12,12 +12,12 @@ namespace taskWebapi.DTOMapping
     {
         public MappingProfile()
         {
-            CreateMap<Employee, empdepdto>().ReverseMap();      
+            CreateMap<Employee, Models.Dtos.EmployeeDepartmentDto>().ReverseMap();      
             CreateMap<Employee, EmployeDisplayDto>().ReverseMap();
-            CreateMap<empdepdto, EmployeeDepartment>().ReverseMap(); 
-            CreateMap<EmployeeDepartment, empdepdto>().ReverseMap();
+            CreateMap<EmployeeDepartment, EmployeeDepartment>().ReverseMap(); 
+            CreateMap<EmployeeDepartment, EmployeeDepartment>().ReverseMap();
 
-            CreateMap<findempdempdto, EmployeeDepartment>().ReverseMap();      
+            CreateMap<FindEmployeeDepartment, Models.EmployeeDepartment>().ReverseMap();      
         }
     }
 }

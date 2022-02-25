@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace taskWebapi.Models.Dtos
 {
-    public class findempdempdto
+    public class EmployeeDepartmentDto
     {
-       public int empId { get; set; }     
+        public int empId { get; set; }
         public string ename { get; set; }
         public string eadd { get; set; }
-        public int esal { get; set; } 
-        public int depId { get; set; }
-        public string dname { get; set; }
+        public int esal { get; set; }
         public int dsgId { get; set; }
-        public string dsgname { get; set; }
+        public int depId { get; set; }
     }
 }

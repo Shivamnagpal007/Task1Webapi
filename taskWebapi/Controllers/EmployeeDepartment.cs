@@ -18,35 +18,26 @@ namespace taskWebapi.Controllers
     [Route("api/EmpDep")]
     [ApiController]
     //[Authorize]
-    public class EmpDepController : ControllerBase
+    public class EmployeeDepartment : ControllerBase
     {
-        private readonly IempDepRepository _empdepRepository;
+        private readonly IEmployeeDepartment _empdepRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbcontext _context;
-       
-        public EmpDepController(IempDepRepository empdepRepository,IMapper mapper, ApplicationDbcontext context)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public EmployeeDepartment(IEmployeeDepartment empdepRepository, IMapper mapper, ApplicationDbcontext context, IUnitOfWork unitOfWork)
         {
             _empdepRepository = empdepRepository;
             _mapper = mapper;
-            _context=context;
-         
+            _context = context;
+            _unitOfWork = unitOfWork;
+
+
         }
-        //[HttpGet("GetEmployeBypredicate")]
-        //public IActionResult GetEmployeesByPredicate(string Name, string Address)
-        //{
-        //    var predicate = PredicateBuilder.New<EmployeeDepartment>();
-        //    if (!string.IsNullOrEmpty(Name))
-        //    {
-        //        predicate = predicate.And(i => i.Employee.ename.ToLower().StartsWith(Name) || i.Employee.eadd.ToLower().StartsWith(Address));
-        //    }
-        //    var employees = _context.EmployeeDepartments.Where(predicate).Select(i => i).Include(p => p.Employee.ename).Include(p => p.Employee.eadd).ToList();
-        //    return Ok(employees);
-            
-        //}
         [HttpGet]
         public IActionResult GetEmployees()
         {
-            return Ok(_empdepRepository.Getempdep());
+            return Ok(_unitOfWork.EmployeDepartment.Getempdep().ToList());
         }
         [HttpGet("GetEmployeeByid/{id}")]
         public IActionResult GetEmployeeByID(int id)
@@ -55,18 +46,18 @@ namespace taskWebapi.Controllers
             if (Employee.Count == 0)
             {
                 return StatusCode(404, ModelState);
-            }              
+            }
             return Ok(Employee);
         }
         [HttpPost]
-        public IActionResult CreateEmployeDepartment([FromBody] empdepdto empdepdto)
+        public IActionResult CreateEmployeDepartment([FromBody] Models.Dtos.EmployeeDepartmentDto empdepdto)
         {
             if (empdepdto == null)
                 //return NotFound();
                 return BadRequest();  // 400 Error
             if (!ModelState.IsValid) return BadRequest(ModelState);
-         // var Employee = _mapper.Map<empdepdto, EmployeeDepartment>(empdepdto);
-            if (_empdepRepository.Createempdep(empdepdto))
+            //var Employee = _mapper.Map<empdepdto, EmployeeDepartment>(empdepdto);
+            if (_unitOfWork.EmployeDepartment.Create(empdepdto))
             {
                 ModelState.AddModelError("", $"SomeThing Went Wrong While Save Data");
                 return StatusCode(500, ModelState); // Server Error
@@ -75,26 +66,29 @@ namespace taskWebapi.Controllers
 
         }
         [HttpPut]
-        public IActionResult UpdateEmployeedepartment([FromBody] empdepdto empdepdto)
+        public IActionResult UpdateEmployeedepartment([FromBody] Models.Dtos.EmployeeDepartmentDto empdepdto)
         {
-            var data = _empdepRepository.Get(empdepdto.empId,empdepdto.depId);
+            var data = _unitOfWork.EmployeDepartment.Get(empdepdto.empId, empdepdto.depId);
             if (data == null)
                 return BadRequest();
 
             if (empdepdto == null)
-                return BadRequest();         
+                return BadRequest();
             if (!ModelState.IsValid) return BadRequest(ModelState);
-             //var Employee = _mapper.Map<empdepdto, EmployeeDepartment>(empdepdto);
-            _empdepRepository.Update(empdepdto);
+            //var Employee = _mapper.Map<empdepdto, EmployeeDepartment>(empdepdto);
+            _unitOfWork.EmployeDepartment.Update(empdepdto);
             return Ok();
         }
         [HttpDelete("{empId}")]
         public IActionResult DeleteEmployeeDepartment(int empId)
         {
             if (empId == 0)
-                return NotFound();           
-            _empdepRepository.Deleteempdep(empId);         
+                return NotFound();
+            _unitOfWork.EmployeDepartment.Delete(empId);
             return Ok();
         }
+
     }
 }
+
+

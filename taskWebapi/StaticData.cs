@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace taskWebapi
 {
-    public class SD
+    public class StaticData
     {
         //roles     
         public const string Role_Admin = "Admin";   

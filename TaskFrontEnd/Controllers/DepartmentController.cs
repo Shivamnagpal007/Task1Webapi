@@ -25,7 +25,7 @@ namespace TaskFrontEnd.Controllers
         public async Task<IActionResult> GetAll()
         {
             
-            return Json(new { data = await _departmentRepository.GetAllAsync(SD.DepartmentApiPath)});
+            return Json(new { data = await _departmentRepository.GetAllAsync(StaticData.DepartmentApiPath)});
         }
 
         public async Task<IActionResult> Upsert(int? id)
@@ -35,7 +35,7 @@ namespace TaskFrontEnd.Controllers
                 return View(department);
             else
             {
-                department = await _departmentRepository.GetAsync(SD.DepartmentApiPath, id.GetValueOrDefault());
+                department = await _departmentRepository.GetAsync(StaticData.DepartmentApiPath, id.GetValueOrDefault());
                 if (department == null)
                     return NotFound();
                 return View(department);
@@ -48,11 +48,11 @@ namespace TaskFrontEnd.Controllers
             {
                 if (department.depId == 0)
                 {
-                    await _departmentRepository.CreateAsync(SD.DepartmentApiPath, department);
+                    await _departmentRepository.CreateAsync(StaticData.DepartmentApiPath, department);
                 }
                 else
                 {
-                    await _departmentRepository.UpdateAsync(SD.DepartmentApiPath + department.depId, department);
+                    await _departmentRepository.UpdateAsync(StaticData.DepartmentApiPath + department.depId, department);
                 }
                return RedirectToAction(nameof(Index));
             }
@@ -67,7 +67,7 @@ namespace TaskFrontEnd.Controllers
         {
             if (id == 0)
                 return NotFound();
-            var status = await _departmentRepository.DeleteAsync(SD.DepartmentApiPath, id);
+            var status = await _departmentRepository.DeleteAsync(StaticData.DepartmentApiPath, id);
             if (status)
                 return Json(new { success = true, message = "data successfully deleted" });
             else

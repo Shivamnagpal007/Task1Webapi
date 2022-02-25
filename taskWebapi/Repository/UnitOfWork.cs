@@ -13,9 +13,13 @@ namespace taskWebapi.Repository
         public UnitOfWork(ApplicationDbcontext context)
         {
             _context = context;
-            Department = new DepRepository(_context);
+            Department = new DepartmentRepository(_context);
+            Designation = new DesignationRepository(_context);
+            EmployeDepartment = new EmployeeDepartmentRepository(_context);
            
         }     
-        public IDepRepository Department { get; private set; }
+        public IDepartmentRepository Department { get; private set; }
+        public IDesignationRepository Designation { get; private set; }
+        public IEmployeeDepartment EmployeDepartment { get; private set; }
     }
 }

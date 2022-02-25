@@ -7,6 +7,8 @@ namespace taskWebapi.Repository.IRepository
 { 
         public interface IUnitOfWork
         {
-        IDepRepository Department{ get; }
+        IDepartmentRepository Department{ get; }
+        IDesignationRepository Designation { get; }
+        IEmployeeDepartment EmployeDepartment { get; }
         }
 }

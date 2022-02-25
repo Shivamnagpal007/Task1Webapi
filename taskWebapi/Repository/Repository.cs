@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using taskWebapi.Data;
+using taskWebapi.Models;
+using taskWebapi.Models.Dtos;
 using taskWebapi.Repository.IRepository;
 
 namespace taskWebapi.Repository

@@ -22,7 +22,7 @@ namespace TaskFrontEnd.Controllers
         }
         public async Task<IActionResult> GetAll()
         {
-            return Json(new { data = await _designationRepository.GetAllAsync(SD.DesignationApiPath)});
+            return Json(new { data = await _designationRepository.GetAllAsync(StaticData.DesignationApiPath)});
         }
         
         public async Task<IActionResult> Upsert(int? id)
@@ -32,7 +32,7 @@ namespace TaskFrontEnd.Controllers
                 return View(designation);
             else
             {
-                designation = await _designationRepository.GetAsync(SD.DesignationApiPath, id.GetValueOrDefault());
+                designation = await _designationRepository.GetAsync(StaticData.DesignationApiPath, id.GetValueOrDefault());
                 if (designation == null)
                     return NotFound();
                 return View(designation);
@@ -45,11 +45,11 @@ namespace TaskFrontEnd.Controllers
             {
                 if (designation.dsgId == 0)
                 {
-                    await _designationRepository.CreateAsync(SD.DesignationApiPath, designation);
+                    await _designationRepository.CreateAsync(StaticData.DesignationApiPath, designation);
                 }
                 else
                 {
-                    await _designationRepository.UpdateAsync(SD.DesignationApiPath +designation.dsgId, designation);
+                    await _designationRepository.UpdateAsync(StaticData.DesignationApiPath +designation.dsgId, designation);
                 }
                 return RedirectToAction(nameof(Index));
             }                              
@@ -64,7 +64,7 @@ namespace TaskFrontEnd.Controllers
         {
             if (id == 0)
                 return NotFound();
-            var status = await _designationRepository.DeleteAsync(SD.DesignationApiPath, id);
+            var status = await _designationRepository.DeleteAsync(StaticData.DesignationApiPath, id);
             if (status)
                 return Json(new { success = true, message = "data successfully deleted" });
             else

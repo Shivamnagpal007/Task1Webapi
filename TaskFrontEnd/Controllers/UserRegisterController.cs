@@ -31,7 +31,7 @@ namespace TaskFrontEnd.Controllers
 
             if (ModelState.IsValid)
             {
-                await _userRepository.CreateUser(SD.UserRegister, user);
+                await _userRepository.CreateUser(StaticData.UserRegister, user);
             }
             return RedirectToAction("userRegister");
                      
@@ -48,7 +48,7 @@ namespace TaskFrontEnd.Controllers
                 using (var httpClient = new HttpClient())
                 {
                     StringContent stringContent = new StringContent(JsonConvert.SerializeObject(authenticateViewModel), Encoding.UTF8, "application/json");
-                    using (var result = await httpClient.PostAsync(SD.UserLogin, stringContent))
+                    using (var result = await httpClient.PostAsync(StaticData.UserLogin, stringContent))
                     {
 
                         var UserDetails = await result.Content.ReadAsStringAsync();
@@ -56,8 +56,8 @@ namespace TaskFrontEnd.Controllers
                         var Username = JsonConvert.DeserializeObject<User>(UserDetails);
                         string token = await result.Content.ReadAsStringAsync();
                         HttpContext.Session.SetString("JWToken", token);
-                        HttpContext.Session.SetString(SD.newtoken, Username.Token);
-                        HttpContext.Session.SetString(SD.UserDetails, Username.Username);
+                        HttpContext.Session.SetString(StaticData.newtoken, Username.Token);
+                        HttpContext.Session.SetString(StaticData.UserDetails, Username.Username);
                         //CookieSet(SD.Cookiesdata, token, 10);
                         return RedirectToAction("LogIn");
                     }

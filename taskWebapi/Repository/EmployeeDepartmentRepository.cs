@@ -7,24 +7,26 @@ using System.Threading.Tasks;
 using taskWebapi.Data;
 using taskWebapi.Models;
 using taskWebapi.Models.Dtos;
+using taskWebapi.Repository;
 using taskWebapi.Repository.IRepository;
 
 namespace taskWebapi.Repository
 {
-    public class EmpdepRepository : IempDepRepository
+    public class EmployeeDepartmentRepository : Repository<EmployeeDepartmentRepository>, IEmployeeDepartment,IFuncForEmployeDepartment
     {
         private readonly ApplicationDbcontext _context;
-        public EmpdepRepository(ApplicationDbcontext context)
+        public EmployeeDepartmentRepository(ApplicationDbcontext context) : base(context)
         {
+
             _context = context;
         }
-        public bool Createempdep(empdepdto empdepdto)
+        public bool Create(Models.Dtos.EmployeeDepartmentDto empdepdto)
         {
-            EmployeeDepartment employee = new EmployeeDepartment()
+            Models.EmployeeDepartment employee = new Models.EmployeeDepartment()
             {
-                
+
                 depId = empdepdto.depId,
-               
+
                 Employee = new Employee
                 {
                     ename = empdepdto.ename,
@@ -37,20 +39,11 @@ namespace taskWebapi.Repository
             _context.EmployeeDepartments.Add(employee);
             _context.SaveChanges();
             return Save();
-            
-        }
 
-        public void Deleteempdep(int id)
-        {
-          var data= _context.Employees.Where(x => x.empId == id).ToList();
-            _context.Employees.RemoveRange(data);
-            var data1 = _context.EmployeeDepartments.FirstOrDefault(e => e.empId == id);       
-             _context.EmployeeDepartments.RemoveRange(data1);
-            _context.SaveChanges();
-          
         }
+     
 
-        public List<findempdempdto> Getempdep()
+        public List<FindEmployeeDepartment> Getempdep()
         {
 
             var employee = (from ed in _context.EmployeeDepartments
@@ -60,7 +53,7 @@ namespace taskWebapi.Repository
                             on ed.empId equals emp.empId
                             join dsg in _context.Designations
                             on emp.dsgId equals dsg.dsgId
-                            select new findempdempdto
+                            select new FindEmployeeDepartment
                             {
                                 empId = emp.empId,
                                 ename = emp.ename,
@@ -71,12 +64,22 @@ namespace taskWebapi.Repository
                             }).ToList();
             return employee;
 
-          
+
+        }
+       
+        public void Delete(int id)
+        {
+            var data = _context.Employees.Where(x => x.empId == id).ToList();
+            _context.Employees.RemoveRange(data);
+            var data1 = _context.EmployeeDepartments.FirstOrDefault(e => e.empId == id);
+            _context.EmployeeDepartments.RemoveRange(data1);
+            _context.SaveChanges();
+
         }
 
-        public EmployeeDepartment Get(int EmpId, int DepId)
+        public Models.EmployeeDepartment Get(int EmpId, int DepId)
         {
-            var data= _context.EmployeeDepartments.Find(EmpId, DepId); // Find code 
+            var data = _context.EmployeeDepartments.Find(EmpId, DepId); // Find code 
             if (data != null)
             {
                 data.depId = DepId;
@@ -86,8 +89,8 @@ namespace taskWebapi.Repository
             return data;
 
         }
-       
-        public List<findempdempdto> GetempdepId(int empId)
+
+        public List<FindEmployeeDepartment> GetempdepId(int empId)
         {
             var employee = (from ed in _context.EmployeeDepartments
                             join dep in _context.Departments
@@ -97,26 +100,26 @@ namespace taskWebapi.Repository
                             join dsg in _context.Designations
                             on emp.dsgId equals dsg.dsgId
                             where emp.empId.Equals(empId)
-                            select new findempdempdto
+                            select new FindEmployeeDepartment
                             {
                                 empId = emp.empId,
                                 ename = emp.ename,
                                 esal = emp.esal,
-                                eadd = emp.eadd,   
-                                dsgId=dsg.dsgId,
+                                eadd = emp.eadd,
+                                dsgId = dsg.dsgId,
                                 dsgname = dsg.dsgname,
                                 depId = dep.depId,
-                                dname = dep.dname                          
+                                dname = dep.dname
                             }).ToList();
             return employee;
-           
+
         }
 
         public bool Save()
         {
             return _context.SaveChanges() == 1 ? true : false;
         }
-        public void Update(empdepdto empdepdto)
+        public void Update(Models.Dtos.EmployeeDepartmentDto empdepdto)
         {
             Employee employee = new Employee()
             {
@@ -126,7 +129,7 @@ namespace taskWebapi.Repository
                 esal = empdepdto.esal,
                 dsgId = empdepdto.dsgId
             };
-         
+
 
             _context.Employees.Update(employee);
             _context.SaveChanges();
@@ -134,3 +137,5 @@ namespace taskWebapi.Repository
 
     }
 }
+
+

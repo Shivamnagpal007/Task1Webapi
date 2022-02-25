@@ -33,17 +33,17 @@ namespace TaskFrontEnd.Controllers
         }
         public async Task<IActionResult> GetAll()
         {
-            return Json(new { data = await _employeRepository.GetAllAsync(SD.EmployeeApiPath)});
+            return Json(new { data = await _employeRepository.GetAllAsync(StaticData.EmployeeApiPath)});
         }
 
         public async Task<IActionResult> Upsert(int? id)
         {
-          var DesignationList = await _designationRepository.GetAllAsync(SD.DesignationApiPath);
-          var Departmentlist = await _departmentRepository.GetAllAsync(SD.DepartmentApiPath);
+          var DesignationList = await _designationRepository.GetAllAsync(StaticData.DesignationApiPath);
+          var Departmentlist = await _departmentRepository.GetAllAsync(StaticData.DepartmentApiPath);
 
             if (id == null)
             {
-                EmployeVM employevm = new EmployeVM()
+                EmployeeViewModel employevm = new EmployeeViewModel()
                 {
                     Employee = new Employee(),
                     DepartmentList = Departmentlist.Select(cl => new SelectListItem()
@@ -62,9 +62,9 @@ namespace TaskFrontEnd.Controllers
             }
             else
             {
-                var employees = await _employeRepository.Getasync(SD.EmployeeApiPathGetByID, id.GetValueOrDefault());
+                var employees = await _employeRepository.Getasync(StaticData.EmployeeApiPathGetByID, id.GetValueOrDefault());
 
-                EmployeVM employevm1 = new EmployeVM()
+                EmployeeViewModel employevm1 = new EmployeeViewModel()
                 {
                     Employee = new Employee()
                     {
@@ -106,11 +106,11 @@ namespace TaskFrontEnd.Controllers
             {
                 if (employee.empId == 0)
                 {
-                    await _employeRepository.CreateAsync(SD.EmployeeApiPath,employee);
+                    await _employeRepository.CreateAsync(StaticData.EmployeeApiPath,employee);
                 }
                 else
                 {
-                    await _employeRepository.UpdateAsync(SD.EmployeeApiPath, employee);
+                    await _employeRepository.UpdateAsync(StaticData.EmployeeApiPath, employee);
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -125,7 +125,7 @@ namespace TaskFrontEnd.Controllers
             if (id == 0)
                 return NotFound();
            // var depid = _employeRepository.GetAsync(SD.EmployeeApiPathGetByID,id);
-            var status = await _employeRepository.DeleteAsync(SD.EmployeeApiPath, id);
+            var status = await _employeRepository.DeleteAsync(StaticData.EmployeeApiPath, id);
             if (status)
               return Json(new { success = true, message = "data successfully deleted" });
             else
